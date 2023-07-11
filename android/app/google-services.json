@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "807210583621",
+    "project_id": "digi-app-b950e",
+    "storage_bucket": "digi-app-b950e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807210583621:android:1bd59de2029d124487052c",
+        "android_client_info": {
+          "package_name": "com.digiappnew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "807210583621-molvpbfocfhg3lm8emquhj61vv72rlrd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.digiappnew",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "807210583621-p0f2ofn8jjenr19vgulkl2c9hjlgvg37.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALbFSyYP90uN-6ETylBx8halcogws6fYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "807210583621-p0f2ofn8jjenr19vgulkl2c9hjlgvg37.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
