@@ -4,11 +4,15 @@ import React, { useState } from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { View, TextInput, Button, Alert, StyleSheet, Text } from 'react-native';
-import { PatientI } from './PatientI';
+import { BrandSMain } from './BrandSMain';
+
 import { Version } from './Version';
 import { PriSecMain } from './PriSecMain';
 import { Footer } from './Footer';
 import {AddPaitent} from './Addpatient';
+import { PatientI } from './PatientI';
+import { DoctorI } from './DoctorI';
+
 
 
 

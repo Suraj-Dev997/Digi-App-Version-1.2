@@ -1,7 +1,7 @@
 import React, { useEffect,useState } from 'react';
 import { Text, View, Button,Image,Alert, FlatList, StyleSheet, ScrollView,TextInput, TouchableOpacity, Modal,Span,ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AddPriSec from './AddPriSec';
+import AddDoctor from './AddDoctor';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditDoctor from './EditDoctor';
 import { Calendar } from 'react-native-calendars';
@@ -10,13 +10,13 @@ import { Picker } from '@react-native-picker/picker';
 
 
 export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
-  const [doctors, setDoctors] = useState([]);
+  const [prisec, setPriSec] = useState([]);
   const [UserId, setUserId] = useState('');
   const [DocId, setDocId] = useState('');
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [selectedDoctorData, setSelectedDoctorData] = useState(undefined);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [doctorDetail, setDoctorDetail] = useState(null);
+  const [prisecDetail, setPriSecDetail] = useState(null);
   const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
   const [isEditDocModalVisible, setIsEditDocModalVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
@@ -74,7 +74,7 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
   useEffect(() => {
     const fetchData = () => {
       setIsLoading(true);
-      fetch('https://digiapi.netcastservice.co.in/DoctorApi/GetDoctorsListSearch', {
+      fetch('https://digiapi.netcastservice.co.in/DoctorApi/GetPriSecSurveyListSearch', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -87,7 +87,7 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
         })
       })
       .then(response => response.json())
-      .then(data => setDoctors(data.responseData))
+      .then(data => setPriSec(data.responseData))
       .catch(error => console.error(error));
       setIsLoading(false);
     };
@@ -102,12 +102,15 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
     // setDocId(doctor.doctorId);
    
     try {
-      const id=doctor.doctorId
+      const id=doctor.priSecId
       const jsonData = JSON.stringify(id);
       const payload ={
-        doctorId:jsonData
+        priSecId:jsonData,
+        clientId: "10001",
+  deptId: "1",
+  userId: UserId
       }
-          fetch('https://digiapi.netcastservice.co.in/DoctorApi/GetDoctorDetail', {
+          fetch('https://digiapi.netcastservice.co.in/DoctorApi/GetPriSecSurveyDetail', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -115,11 +118,13 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
             body: JSON.stringify(payload)
           })
           .then(response => response.json())
-          .then(data => setDoctorDetail(data.responseData))
+          .then(data => setPriSecDetail(data.responseData))
           .catch(error => console.error(error))
           setIsProfileModalVisible(!isProfileModalVisible);
+          console.log(payload);
+          console.log(data.responseData);
       await AsyncStorage.setItem('DoctorId',jsonData );
-      console.log('DoctorId saved successfully',doctorDetail);
+      console.log('PrimarySecondary saved successfully',prisecDetail);
     } catch (error) {
       console.log('Error saving data:', error);
     }
@@ -131,7 +136,7 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
   }
 
   const renderModal = (onClose) => {
-    if (doctorDetail) {
+    if (prisecDetail) {
      
       return (
         <Modal visible={isProfileModalVisible} animationType="slide" transparent>
@@ -140,60 +145,37 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
         <View style={styles.innerstyle}>
         <View style={styles.row}>
       <View style={styles.column}>
-        <Text style={styles.textl}>Doctor Name :</Text>
+        <Text style={styles.textl}>priSecId :</Text>
       </View>
       <View style={styles.column}>
-        <Text style={styles.text}>{doctorDetail.doctorName}</Text>
+        <Text style={styles.text}>{prisecDetail.priSecId}</Text>
       </View>
     </View>
     <View style={styles.row}>
       <View style={styles.column}>
-        <Text style={styles.textl}>Doctor Mobile :</Text>
+        <Text style={styles.textl}>Primary:</Text>
       </View>
       <View style={styles.column}>
-        <Text style={styles.text}>{doctorDetail.mobile}</Text>
+        <Text style={styles.text}>{prisecDetail.primaryData}</Text>
       </View>
     </View>
     <View style={styles.row}>
       <View style={styles.column}>
-        <Text style={styles.textl}>Mcl Code :</Text>
+        <Text style={styles.textl}>Secondary :</Text>
       </View>
       <View style={styles.column}>
-        <Text style={styles.text}>{doctorDetail.mclCode}</Text>
+        <Text style={styles.text}>{prisecDetail.secondaryData}</Text>
       </View>
     </View>
     <View style={styles.row}>
       <View style={styles.column}>
-        <Text style={styles.textl}>Dob :</Text>
+        <Text style={styles.textl}>Date :</Text>
       </View>
       <View style={styles.column}>
-        <Text style={styles.text}>{doctorDetail.dob}</Text>
+        <Text style={styles.text}>{prisecDetail.customDate}</Text>
       </View>
     </View>
-    <View style={styles.row}>
-      <View style={styles.column}>
-        <Text style={styles.textl}>State :</Text>
-      </View>
-      <View style={styles.column}>
-        <Text style={styles.text}>{doctorDetail.state}</Text>
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.column}>
-        <Text style={styles.textl}>City :</Text>
-      </View>
-      <View style={styles.column}>
-        <Text style={styles.text}>{doctorDetail.city}</Text>
-      </View>
-    </View>
-    <View style={styles.row}>
-      <View style={styles.column}>
-        <Text style={styles.textl}>Number Of Camps :</Text>
-      </View>
-      <View style={styles.column}>
-        <Text style={styles.text}>{doctorDetail.noOfCamp}</Text>
-      </View>
-    </View>
+   
    
             {/* {doctorDetail.doctorCampList && (
               <FlatList
@@ -259,12 +241,13 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
       </TouchableOpacity>
       
       </View>
-      <View><AddPriSec/></View>
+      <View><AddDoctor/></View>
       <View>
       <View style={styles.containermain}>
       <View style={styles.row}>
-        <Text style={styles.columnHeader}>Name</Text>
-        <Text style={styles.columnHeader}>Mobile</Text>
+        <Text style={styles.columnHeader}>Primary</Text>
+        <Text style={styles.columnHeader}>Secondary</Text>
+        <Text style={styles.columnHeader}>Date</Text>
         <Text style={styles.columnHeader}>Action</Text>
       </View>
       {isLoading ? (
@@ -273,15 +256,16 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
         </View>
           ) : (
     <FlatList
-        data={doctors}
-        keyExtractor={item => item.doctorId.toString()}
+        data={prisec}
+        keyExtractor={item => item.priSecId.toString()}
         ListEmptyComponent={() => (
           <Text style={styles.noDataMsg}>No data available</Text>
         )}
         renderItem={({ item }) => (
           <View style={styles.row}>
-          <Text style={styles.name}>{item.doctorName}</Text>
-          <Text style={styles.mobile}>{item.mobile}</Text>
+          <Text style={styles.name}>{item.primaryData}</Text>
+          <Text style={styles.mobile}>{item.secondaryData}</Text>
+          <Text style={styles.mobile}>{item.customDate}</Text>
           <TouchableOpacity style={styles.actionButton} onPress={() => handleMoreInfo(item)}>
           <Icon name="info" size={20} color="white" />
           </TouchableOpacity>
