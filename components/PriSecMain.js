@@ -1,11 +1,11 @@
 import React, { useEffect,useState } from 'react';
 import { Text, View, Button,Image,Alert, FlatList, StyleSheet, ScrollView,TextInput, TouchableOpacity, Modal,Span,ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AddDoctor from './AddDoctor';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditDoctor from './EditDoctor';
 import { Calendar } from 'react-native-calendars';
 import { Picker } from '@react-native-picker/picker';
+import AddPriSec from './AddPriSec';
 
 
 
@@ -21,16 +21,6 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
   const [isEditDocModalVisible, setIsEditDocModalVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-
-  // const handleEditDocIconPress = (doctordata) => {
-  //   setIsEditDocModalVisible(!isEditDocModalVisible);
-  //   setSelectedDoctorData(doctordata);
-  // };
-
-  // const handleEditDoc = () => {
-  //   // Handle logout logic here
-  //   setIsEditDocModalVisible(false);
-  // };
 
   const handleCloseModal = () => {
     // Handle logout logic here
@@ -51,25 +41,7 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
     getData();
   }, []);
 
- 
-  // useEffect(() => {
-  //   fetch('https://digiapi.netcastservice.co.in/DoctorApi/GetDoctorsListSearch', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({ 
-  //       searchText: searchText,
-  //       clientId: "10001",
-  //       deptId: "1",
-  //       userId: UserId
-  //     }
-  //     )
-  //   })
-  //   .then(response => response.json())
-  //   .then(data => setDoctors(data.responseData))
-  //   .catch(error => console.error(error))
-  // }, [UserId, searchText]);
+
 
   useEffect(() => {
     const fetchData = () => {
@@ -176,34 +148,6 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
       </View>
     </View>
    
-   
-            {/* {doctorDetail.doctorCampList && (
-              <FlatList
-                data={doctorDetail.doctorCampList}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <View>
-                    <View style={styles.row1}>
-      <View style={styles.column}>
-        <Text style={styles.textl}>Camp Name :</Text>
-      </View>
-      <View style={styles.column}>
-        <Text style={styles.text}>{item.campName}</Text>
-      </View>
-    </View> 
-    <View style={styles.row1}>
-      <View style={styles.column}>
-        <Text style={styles.textl}>Camp Date :</Text>
-      </View>
-      <View style={styles.column}>
-        <Text style={styles.text}>{item.campDate}</Text>
-      </View>
-    </View> 
-   
-   </View>
-                )}
-              />
-            )} */}
             
           </View>
           <TouchableOpacity
@@ -241,7 +185,7 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
       </TouchableOpacity>
       
       </View>
-      <View><AddDoctor/></View>
+      <View><AddPriSec/></View>
       <View>
       <View style={styles.containermain}>
       <View style={styles.row}>
@@ -272,7 +216,6 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
           <TouchableOpacity style={styles.actionButton} onPress={()=>UpdateDoctor(item)}>
           <Icon name="edit" size={20} color="white" />
           </TouchableOpacity>
-          
         </View>
         )}
       />
@@ -291,33 +234,21 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
   const [selectedDate, setSelectedDate] = useState('Date');
   const [showCalendar, setShowCalendar] = useState(false);
   const [UserId, setUserId] = useState('');
-
-  const [selectedState, setSelectedState] = useState('');
-  const [selectedStateCode, setSelectedStateCode] = useState('');
-  const [docDetail, setDocDetail] = useState([]);
-  const [doctorId, setDoctorId] = useState('');
-  const [doctorName, setDoctorName] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [dob, setDob] = useState('');
-  const [address, setAddress] = useState('');
-  const [mclCode, setMclCode] = useState('');
   const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [cAmpHBValue, setCampHBValue] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
-  const [selectedCityCode, setSelectedCityCode] = useState('');
-  const [doctorDetail, setDoctorDetail] = useState(null);
-  const [stateList, setStateList] = useState([]);
-  const [cityList, setCityList] = useState([]);
-  const [error, setError] = useState(null);
-  const [selectedHBValue, setSelectedHBValue] = useState(null);
 
-  const handleStateChange = (itemValue, itemIndex) => {
-    setSelectedStateCode(itemValue);
-    console.log(itemValue)
-    console.log(selectedStateCode)
-    const selectedItem = stateList.find((state) => state.key === itemValue);
-    setSelectedState(selectedItem ? selectedItem.value : '--Select State--');
-  };
+  const [docDetail, setDocDetail] = useState([]);
+  const [prisecId, setPriSecId] = useState('');
+  const [primary, setPrimary] = useState('');
+  const [secondary, setSecondary] = useState('');
+
+
+
+  const [prisecDetail, setPriSecDetail] = useState(null);
+  const [stateList, setStateList] = useState([]);
+  const [error, setError] = useState(null);
+
+
+
 
   useEffect(() => {
     const getData = async () => {
@@ -335,63 +266,17 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
   }, []);
  
   useEffect(() => {
-    // console.log(selectedDoctorData)
-    fetch('https://digiapi.netcastservice.co.in/DoctorApi/GetStates',{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => setStateList(data.responseData))
-      .catch(error => console.error(error));
-  }, []);
-  useEffect(() => {
-    if (selectedStateCode) {
-      // Fetch the list of cities for the selected state from the API
-      fetch('https://digiapi.netcastservice.co.in/DoctorApi/GetCities', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          key: selectedStateCode,
-          value: ''
-        })
-      })
-        .then(response => response.json())
-        .then(data => setCityList(data.responseData))
-        .catch(error => console.error(error));
-    } else {
-      // Clear the city list when no state is selected
-      setCityList([]);
-    }
-  }, [selectedState, selectedStateCode]);
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const jsonData = await AsyncStorage.getItem('DoctorId');
-  //       if (jsonData !== null) {
-  //         const data = JSON.parse(jsonData);
-  //         setDocId(data);
-  //         console.log(data)
-  //       }
-  //     } catch (error) {
-  //       console.log('Error retrieving data:', error);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
-  
-  useEffect(() => {
     const handleMoreInfo = async(doctor) => {
         setSelectedDoctor(doctor);
         try {
-          const jsonData = JSON.stringify(props.selectedDoctorData.doctorId);
+          const jsonData = JSON.stringify(props.selectedDoctorData.priSecId);
           const payload ={
-            doctorId:jsonData
+            priSecId:jsonData,
+            clientId: "10001",
+  deptId: "1",
+  userId: UserId
           }
-          fetch('https://digiapi.netcastservice.co.in/DoctorApi/GetDoctorDetail', {
+          fetch('https://digiapi.netcastservice.co.in/DoctorApi/GetPriSecSurveyDetail', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -399,7 +284,7 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
             body: JSON.stringify(payload)
           })
           .then(response => response.json())
-          .then(data => setDoctorDetail(data.responseData))
+          .then(data => setPriSecDetail(data.responseData))
           .catch(error => console.error(error))
         } catch (error) {
           console.log('Error saving data:', error);
@@ -409,93 +294,36 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
        
       }
     handleMoreInfo();
-  }, [props.selectedDoctorData]);
+  }, [UserId, props.selectedDoctorData]);
+
+
 
   useEffect(()=>{
-    console.log(doctorDetail)
-    if(doctorDetail){
-      setDoctorId(doctorDetail.doctorId)
-      setDoctorName(doctorDetail.doctorName)
-      setMobile(doctorDetail.mobile)
-      setAddress(doctorDetail.address)
-      setMclCode(doctorDetail.mclCode)
-      setDob(doctorDetail.dob)
-   
-      setSelectedStateCode(doctorDetail.stateCode)
-   
-      setSelectedCityCode(doctorDetail.cityCode)
-      setDocDetail(doctorDetail.doctorCampList)
-   console.log("This :",docDetail)
- 
-  // const campDates = docDetail.map((item) => item.campDate);
-  // console.log(campDates);
-  
-  //  const campDate = docDetail[''].campDate;
-  //  console.log(campDate);
-      // setCampHBValue(doctorDetail.cAmpHBValue)
+    console.log(prisecDetail)
+    if(prisecDetail){
+      setPriSecId(prisecDetail.priSecId)
+      setPrimary(prisecDetail.primaryData)
+      setSecondary(prisecDetail.secondaryData)
+      setSelectedDate(prisecDetail.customDate)
+     
+   console.log("This :",prisecDetail)
     }
 
-  },[docDetail, doctorDetail])
+  },[docDetail, prisecDetail])
 
-
-// Ankur Vishnoi
-
-
-
-  let markedDay = {};
-
-  docDetail.map((item) => {
-    markedDay[item.campDate] = {
-      selected: true,
-      marked: true,
-      selectedColor: "purple",
-    };
-  });
-  // console.log(markedDay)
-  // console.log(selectedDate)
-  
-  const handleDayPress = (day) => {
-    setSelectedDate(day.dateString);
-    setShowCalendar(false);
-    setCampHBValue("0");
-    docDetail.map((item) => {
-      // console.log("This is selected Date:", day.dateString)
-      if(day.dateString==item.campDate){
-        setCampHBValue(item.cAmpHBValue);
-        console.log(item.cAmpHBValue);
-      }
-     
-    });
-
-    // const selectedDoc = docDetail.find((doc) => doc.campDate === day.dateString);
-    // if (selectedDoc) {
-    //   setSelectedHBValue(selectedDoc.cAmpHBValue);
-    // } else {
-    //   setSelectedHBValue(null);
-    // }
-  };
 
   const EditDocFunction = () => {
     const payload ={
-      doctorId: doctorId,
-        doctorName:doctorName,
-        mobile:mobile,
-        dob: dob,
-        mclCode:mclCode,
-        stateCode:selectedStateCode,
-        cityCode:selectedCityCode,
-        state:selectedStateCode,
-        city:selectedCityCode,
-        doctorCampDetail: {
-          campDate:selectedDate,
-          cAmpHBValue:cAmpHBValue,
-        },
+      priSecId: prisecId,
+      primaryData: primary,
+  secondaryData: secondary,
+  customDate: selectedDate,
         clientId:"10001",
         deptId:"1",
         userId:UserId
      }
      console.log("This is payload:",payload)
-    fetch('https://digiapi.netcastservice.co.in/DoctorApi/ManageDoctor', {
+    fetch('https://digiapi.netcastservice.co.in/DoctorApi/ManagePriSecSurvey', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -539,84 +367,26 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
         <View style={styles.modalContent}>
         <ScrollView>
            
-        <View style={styles.form}>
-          <TextInput
-        style={styles.input}
-        placeholder="Doctor Name"
-        placeholderTextColor="#000"
-        value={doctorName} 
-        onChangeText={(text)=>setDoctorName(text)}
-      />
+      <View style={styles.form}>
+         
       <TextInput
         style={styles.input}
-        placeholder="Doctor Mobile"
+        placeholder="Primary"
         placeholderTextColor="#000"
         keyboardType="numeric"
-        value={mobile}
-        onChangeText={(text)=>setMobile(text)}
-       
-       
+        value={primary}
+        onChangeText={(text)=>setPrimary(text)}
       />
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Doctor Address" 
-        placeholderTextColor="#000"
-        value={address} 
-        onChangeText={(text)=>setAddress(text)}
-      
-      /> */}
       <TextInput
         style={styles.input}
-        placeholder="MCL Code" 
+        placeholder="Secondary"
         placeholderTextColor="#000"
-        value={mclCode} 
-        onChangeText={(text)=>setMclCode(text)}
         keyboardType="numeric"
-      
+        value={secondary}
+        onChangeText={(text)=>setSecondary(text)}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Doctor DOB (DD-MM-YYYY)"
-        placeholderTextColor="#000"
-        value={dob} 
-        onChangeText={(text)=>setDob(text)}
-      />
-      <View style={styles.pickcontainer}>
-       <Picker
-        selectedValue={selectedStateCode}
-        onValueChange={handleStateChange}
-        style={styles.picker}
-      >
-      <Picker.Item label="--Select State--" value="" />
-        {stateList.map(state => (
-          <Picker.Item key={state.key} label={state.value} value={state.key} />
-        ))}
-      </Picker>
-       </View>
-
-       {cityList && cityList.length > 0 && (
-        <React.Fragment>
-         <View style={styles.pickcontainer}>
-         <Picker
-            selectedValue={selectedCityCode}
-            onValueChange={(itemValue, itemIndex) => setSelectedCityCode(itemValue)}
-          >
-            <Picker.Item label="--Select City--" value="" />
-            {cityList.map(city => (
-              <Picker.Item key={city.key} label={city.value} value={city.key} />
-            ))}
-          </Picker>
-         </View>
-        </React.Fragment>
-      )}
-       
       
-      {/* <TextInput
-        style={styles.input}
-        placeholder="No.of camps"
-        placeholderTextColor="#000"
-      /> */}
-   <View style={styles.containert}>
+      <View style={styles.containert}>
         <View > 
         <TouchableOpacity style={styles.selectButton} onPress={() => setShowCalendar(true)}>
           <Text style={styles.selectButtonText}>Select Date</Text>
@@ -627,40 +397,18 @@ export const PriSecMain = ({ onChangeText, onPress,data,isVisible  }) =>{
         {showCalendar && (
         <Calendar
         style={styles.cal}
-        markedDates={markedDay}
-  onDayPress={handleDayPress}
+          onDayPress={(day) => {
+            setSelectedDate(day.dateString);
+            setShowCalendar(false);
+          }}
         />
       )}
-        {/* <TextInput  
-  placeholder="Date"
-  value={selectedDate ? selectedDate.toString() : ''}
-  style={styles.inputcal}
-  onPress={() => setShowCalendar(true)}
-/> */}
+       
   
      </View>
     </View>
-    <TouchableOpacity style={styles.selectButton}>
-          <Text style={styles.selectButtonText}>Hb camp Value</Text>
-        </TouchableOpacity>
-       <TextInput
-        style={styles.input}
-        placeholder="Hb camp Value"
-        placeholderTextColor="#000"
-        value={cAmpHBValue}
-        keyboardType="numeric"
-        onChangeText={(text)=>setCampHBValue(text)}
-      />
-      {/* <TextInput
-       style={styles.messageInput}
-       multiline={true}
-          numberOfLines={4}
-        placeholder="Message"
-        placeholderTextColor="#000"
-        value={message}
-        onChangeText={(text) => setMessage(text)}
-      /> */}
-      {/* <Button title="Submit" onPress={handlePress} /> */}
+   
+     
       <TouchableOpacity style={styles.submitButton} onPress={EditDocFunction}>
           <Text style={styles.submitButtonText}>SUBMIT</Text>
         </TouchableOpacity>
