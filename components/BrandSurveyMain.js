@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import EditDoctor from './EditDoctor';
 import { Calendar } from 'react-native-calendars';
 import { Picker } from '@react-native-picker/picker';
-import AddPriSec from './AddPriSec';
+import AddBrandSurvey from './AddBrandSurvey';
 
 
 
@@ -193,7 +193,7 @@ export const BrandSurveyMain = ({ onChangeText, onPress,data,isVisible  }) =>{
       </TouchableOpacity>
       
       </View>
-      <View><AddPriSec/></View>
+      <View><AddBrandSurvey/></View>
       <View>
       <View style={styles.containermain}>
       <View style={styles.row}>
