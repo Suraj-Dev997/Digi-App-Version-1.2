@@ -10,8 +10,9 @@ import { Version } from './Version';
 import { PriSecMain } from './PriSecMain';
 import { Footer } from './Footer';
 import {AddPaitent} from './Addpatient';
-import { PatientI } from './PatientI';
-import { DoctorI } from './DoctorI';
+
+import { BrandSurveyMain } from './BrandSurveyMain';
+
 
 
 
@@ -30,7 +31,7 @@ export const BrandSurvey = (props) =>{
         }}>
         <Tab.Screen name='PriSecMain' component={PriSecMain} options={{title:"PRI. SEC.",
 }}/>
-        <Tab.Screen name='PatientI' component={PatientI} options={{title:"Brand Survey",
+        <Tab.Screen name='BrandSurveyMain' component={BrandSurveyMain} options={{title:"Brand Survey",
 }}/>
         </Tab.Navigator>
         
