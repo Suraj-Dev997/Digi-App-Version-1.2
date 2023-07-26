@@ -190,16 +190,14 @@ export const BrandSurveyMain = ({ onChangeText, onPress,data,isVisible  }) =>{
       />
       <TouchableOpacity style={styles.button} disabled>
         <Icon name="search" size={20} color="white" />
-      </TouchableOpacity>
-      
+      </TouchableOpacity>     
       </View>
       <View><AddBrandSurvey/></View>
       <View>
       <View style={styles.containermain}>
       <View style={styles.row}>
         <Text style={styles.columnHeader}>Doctor Name</Text>
-        <Text style={styles.columnHeader}>Mcl Code</Text>
-       
+        <Text style={styles.columnHeader}></Text>
         <Text style={styles.columnHeader}>Action</Text>
       </View>
       {isLoading ? (
@@ -216,8 +214,7 @@ export const BrandSurveyMain = ({ onChangeText, onPress,data,isVisible  }) =>{
         renderItem={({ item }) => (
           <View style={styles.row}>
           <Text style={styles.name}>{item.doctorName}</Text>
-          <Text style={styles.mobile}>{item.mclCode}</Text>
-          
+          <Text style={styles.dot}>.</Text>
           <TouchableOpacity style={styles.actionButton} onPress={() => handleMoreInfo(item)}>
           <Icon name="info" size={20} color="white" />
           </TouchableOpacity>
@@ -502,6 +499,12 @@ export const BrandSurveyMain = ({ onChangeText, onPress,data,isVisible  }) =>{
       paddingVertical: 10,
     },
     name: {
+      textAlign:'center',
+      flex: 2,
+      marginRight: 10,
+    },
+    dot: {
+      color:"#fff",
       textAlign:'center',
       flex: 2,
       marginRight: 10,
